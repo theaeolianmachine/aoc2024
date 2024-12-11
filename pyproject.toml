@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "aoc2024"
+version = "0.1.0"
+description = ""
+authors = ["Johnny Goodnow <johnny@jgoodnow.me>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.10.0"
+ruff = "^0.8.2"
+pyright = "^1.1.390"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
