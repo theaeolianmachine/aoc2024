@@ -1,5 +1,5 @@
 def parse_input() -> str:
-    with open("day9.txt") as fobj:
+    with open("day9/day9.txt") as fobj:
         return fobj.read().strip()
 
 

@@ -22,7 +22,7 @@ def turn_right(dir: Direction) -> Direction:
 
 
 def parse_input() -> list[list[str]]:
-    with open("day6.txt") as fobj:
+    with open("day6/day6.txt") as fobj:
         return [list(line.strip()) for line in fobj.readlines()]
 
 

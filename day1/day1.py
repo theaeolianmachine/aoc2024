@@ -5,7 +5,7 @@ def parse_lists() -> tuple[list[int], list[int]]:
     list_one: list[int] = []
     list_two: list[int] = []
 
-    with open("day1.txt") as fobj:
+    with open("day1/day1.txt") as fobj:
         input_lines = fobj.readlines()
     for line in input_lines:
         first, second = line.strip().split()

@@ -3,7 +3,7 @@ def in_bounds(x: int, y: int, width: int, height: int) -> bool:
 
 
 def parse_input() -> list[str]:
-    with open("day4.txt") as fobj:
+    with open("day4/day4.txt") as fobj:
         return [line.strip() for line in fobj.readlines()]
 
 

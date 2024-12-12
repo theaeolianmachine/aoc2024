@@ -3,7 +3,7 @@ from itertools import product
 
 def parse_input() -> list[tuple[int, tuple[int, ...]]]:
     parsed: list[tuple[int, tuple[int, ...]]] = []
-    with open("day7.txt") as fobj:
+    with open("day7/day7.txt") as fobj:
         lines = fobj.readlines()
 
     for line in lines:

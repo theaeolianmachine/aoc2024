@@ -1,5 +1,5 @@
 def parse_input() -> list[str]:
-    with open("day11.txt") as fobj:
+    with open("day11/day11.txt") as fobj:
         return [num for num in fobj.read().strip().split()]
 
 

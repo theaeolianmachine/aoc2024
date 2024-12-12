@@ -2,7 +2,7 @@ from collections import deque
 
 
 def parse_input() -> list[list[int]]:
-    with open("day10.txt") as fobj:
+    with open("day10/day10.txt") as fobj:
         return [[int(c) for c in line.strip()] for line in fobj.readlines()]
 
 

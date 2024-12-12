@@ -2,7 +2,7 @@ import re
 
 
 def parse_input() -> list[str]:
-    with open("day3.txt") as fobj:
+    with open("day3/day3.txt") as fobj:
         return fobj.readlines()
 
 

@@ -1,5 +1,5 @@
 def parse_reports() -> list[tuple[int, ...]]:
-    with open("day2.txt") as fobj:
+    with open("day2/day2.txt") as fobj:
         lines = fobj.readlines()
 
     return [tuple(int(num) for num in line.strip().split()) for line in lines]

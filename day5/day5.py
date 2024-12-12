@@ -2,7 +2,7 @@ from functools import cmp_to_key
 
 
 def parse_input() -> tuple[list[tuple[int, ...]], list[tuple[int, ...]]]:
-    with open("day5.txt") as fobj:
+    with open("day5/day5.txt") as fobj:
         lines = fobj.readlines()
 
     split_index = lines.index("\n")

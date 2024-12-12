@@ -2,7 +2,7 @@ from itertools import combinations
 
 
 def parse_input() -> list[list[str]]:
-    with open("day8.txt") as fobj:
+    with open("day8/day8.txt") as fobj:
         return [list(line.strip()) for line in fobj.readlines()]
 
 
