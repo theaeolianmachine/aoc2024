@@ -1,8 +1,29 @@
 from collections import deque
+from enum import Enum
+
+
+class Direction(Enum):
+    NORTH = 1
+    EAST = 2
+    SOUTH = 3
+    WEST = 4
+
+
+def get_direction(ri: int, ci: int, ri2: int, ci2: int):
+    if (ri - 1, ci) == (ri2, ci2):
+        return Direction.NORTH
+    elif (ri, ci + 1) == (ri2, ci2):
+        return Direction.EAST
+    elif (ri + 1, ci) == (ri2, ci2):
+        return Direction.SOUTH
+    elif (ri, ci - 1) == (ri2, ci2):
+        return Direction.WEST
+    else:
+        raise ValueError("Not adjacent")
 
 
 def parse_input() -> list[list[str]]:
-    with open("day12/day12small.txt") as fobj:
+    with open("day12/day12.txt") as fobj:
         return [[c for c in line.strip()] for line in fobj.readlines()]
 
 
@@ -49,6 +70,29 @@ def find_region(
     return visited
 
 
+def count_sides(
+    plant_type: str, region: set[tuple[int, int]], plots: list[list[str]]
+) -> int:
+    total_sides = 0
+    side_segments: set[tuple[tuple[int, int], Direction]] = set()
+    for ri, ci in sorted(region):
+        possible_sides = {
+            ((r, c), get_direction(ri, ci, r, c))
+            for r, c in ((ri - 1, ci), (ri, ci + 1), (ri + 1, ci), (ri, ci - 1))
+            if not in_bounds(r, c, plots) or plots[r][c] != plant_type
+        }
+        for loc, dir in possible_sides:
+            if dir in (Direction.NORTH, Direction.SOUTH):
+                possible_adj = ((loc[0], loc[1] - 1), (loc[0], loc[1] + 1))
+            else:
+                possible_adj = ((loc[0] - 1, loc[1]), (loc[0] + 1, loc[1]))
+            if not any((adj_loc, dir) in side_segments for adj_loc in possible_adj):
+                total_sides += 1
+            side_segments.add((loc, dir))
+
+    return total_sides
+
+
 def part_one(plots: list[list[str]]) -> int:
     regions: dict[str, list[dict[tuple[int, int], int]]] = {}
     visited_plants: set[tuple[int, int]] = set()
@@ -89,8 +133,8 @@ def part_two(plots: list[list[str]]):
     for plant_type in regions:
         for region in regions[plant_type]:
             area = len(region.keys())
-            perimeter = sum(region.values())
-            total_cost += area * perimeter
+            num_sides = count_sides(plant_type, set(region.keys()), plots)
+            total_cost += area * num_sides
 
     return total_cost
 
