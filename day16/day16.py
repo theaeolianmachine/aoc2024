@@ -1,4 +1,5 @@
 import heapq
+from collections import deque
 from dataclasses import dataclass
 from enum import IntEnum
 from typing import Self
@@ -133,8 +134,60 @@ def part_one(maze: list[list[str]]):
     raise ValueError("Impossible to reach goal")
 
 
-def part_two():
-    pass
+def part_two(maze: list[list[str]]):
+    start: MazeNode | None = None
+    goal: tuple[int, int] | None = None
+
+    for ri in range(len(maze)):
+        for ci in range(len(maze[ri])):
+            if maze[ri][ci] == "S":
+                assert start is None
+                start = MazeNode(ri, ci, Direction.EAST)
+            if maze[ri][ci] == "E":
+                assert goal is None
+                goal = (ri, ci)
+
+    if start is None or goal is None:
+        raise ValueError("Couldn't find the start or the finish")
+
+    pri_queue: list[tuple[int, MazeNode]] = [(search_heuristic(start, goal), start)]
+    all_parent_nodes: dict[MazeNode, set[MazeNode]] = {}
+    g_scores: dict[MazeNode, int] = {start: 0}
+    f_scores: dict[MazeNode, int] = {start: search_heuristic(start, goal)}
+
+    while pri_queue:
+        f_score, maze_node = heapq.heappop(pri_queue)
+        if (maze_node.ri, maze_node.ci) == goal:
+            unique_nodes: set[tuple[int, int]] = {(maze_node.ri, maze_node.ci)}
+            optimal_nodes_to_explore: deque[MazeNode] = deque((maze_node,))
+            while optimal_nodes_to_explore:
+                current_node = optimal_nodes_to_explore.popleft()
+                if current_node not in all_parent_nodes:
+                    # No parents found
+                    continue
+                parent_nodes = all_parent_nodes[current_node]
+                for parent in parent_nodes:
+                    unique_nodes.add((parent.ri, parent.ci))
+                    optimal_nodes_to_explore.append(parent)
+            return len(unique_nodes)
+
+        for adj_node in get_adjacent_nodes(maze_node, maze):
+            g_score = (
+                g_scores[maze_node]
+                + (maze_node.dir.num_rotations(adj_node.dir) * 1000)
+                + 1
+            )
+            if adj_node not in g_scores or g_score < g_scores[adj_node]:
+                f_score = g_score + search_heuristic(adj_node, goal)
+                all_parent_nodes[adj_node] = set((maze_node,))
+                g_scores[adj_node] = g_score
+                f_scores[adj_node] = f_score
+                if adj_node not in pri_queue:
+                    heapq.heappush(pri_queue, (f_score, adj_node))
+            elif adj_node in g_scores and g_score == g_scores[adj_node]:
+                all_parent_nodes[adj_node].add(maze_node)
+
+    raise ValueError("Impossible to reach goal")
 
 
 def main():
@@ -142,7 +195,7 @@ def main():
     print("Part One:")
     print(part_one(maze))
     print("Part Two:")
-    print(part_two())
+    print(part_two(maze))
 
 
 if __name__ == "__main__":
